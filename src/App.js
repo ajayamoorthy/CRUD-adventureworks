@@ -40,51 +40,20 @@ function App() {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
   }
   
+  async function fetchCustomer(id) {
 
-/*   async function fetchCustomer(id) {
-    const endpoint = `/data-api/rest/Customer`;
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+    console.log(BASE_URL);
+
+    const endpoint = `${BASE_URL}/data-api/rest/Customer/CustomerID`;
     console.log(`Fetching customer with ID: ${id}`);
-    const response = await fetch(`${endpoint}/CustomerID/${id}`);
+    const response = await fetch(`${endpoint}/${id}`);
     const result = await response.json();
     console.table(result.value);
     console.log('API Response:', result);
     setCustomer(result.value[0]);
     setIsEditing(false);
-  } */
-
-    async function fetchCustomer(id) {
-      const endpoint = `/data-api/rest/Customer`;
-      console.log(`Fetching customer with ID: ${id}`);
-      
-      try {
-          const fullUrl = `${endpoint}/CustomerID/${id}`;
-          console.log(`Fetching from URL: ${fullUrl}`);
-          
-          const response = await fetch(fullUrl);
-          
-          if (!response.ok) {
-              const errorResponse = await response.json();
-              console.error('Error fetching customer:', errorResponse);
-              alert(`Error: ${errorResponse.Message}`);
-              return; // Exit if response is not ok
-          }
-  
-          const result = await response.json();
-          console.table(result.value);
-          console.log('API Response:', result);
-          
-          if (result.value && result.value.length > 0) {
-              setCustomer(result.value[0]);
-          } else {
-              alert('No customer found or unexpected response format.');
-          }
-  
-          setIsEditing(false);
-      } catch (error) {
-          console.error('Fetch error:', error);
-          alert('Error fetching customer: ' + error.message);
-      }
-  }
+  } 
   
 
   async function handleUpdate() {
