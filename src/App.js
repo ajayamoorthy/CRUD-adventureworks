@@ -41,7 +41,7 @@ function App() {
   }
   
   async function fetchCustomer(id) {
-    const endpoint = `/data-api/rest/Customer/CustomerID`;
+    const endpoint = `/data-api/rest/Customer/CustomerID`; 
     console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/${id}`);
     
