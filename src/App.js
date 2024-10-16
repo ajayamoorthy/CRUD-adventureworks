@@ -41,16 +41,22 @@ function App() {
   }
   
   async function fetchCustomer(id) {
-    
     const endpoint = `https://brave-desert-0e6da1a1e.5.azurestaticapps.net/data-api/rest/Customer/CustomerID`;
     console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/${id}`);
+    
+    if (!response.ok) {
+        console.error('Fetch error:', response.statusText);
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
     const result = await response.json();
     console.table(result.value);
     console.log('API Response:', result);
     setCustomer(result.value[0]);
     setIsEditing(false);
-  } 
+  }
+
   
 
   async function handleUpdate() {
