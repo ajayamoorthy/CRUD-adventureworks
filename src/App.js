@@ -41,11 +41,8 @@ function App() {
   }
   
   async function fetchCustomer(id) {
-
-    const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-    console.log(BASE_URL);
-
-    const endpoint = `${BASE_URL}/data-api/rest/Customer/CustomerID`;
+    
+    const endpoint = `/data-api/rest/Customer/CustomerID`;
     console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/${id}`);
     const result = await response.json();
