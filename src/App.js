@@ -43,9 +43,11 @@ function App() {
 
   async function fetchCustomer(id) {
     const endpoint = `/data-api/rest/Customer`;
+    console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/CustomerID/${id}`);
     const result = await response.json();
     console.table(result.value);
+    console.log('API Response:', result);
     setCustomer(result.value[0]);
     setIsEditing(false);
   }
