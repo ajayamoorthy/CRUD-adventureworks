@@ -42,7 +42,7 @@ function App() {
   
   async function fetchCustomer(id) {
     
-    const endpoint = `/data-api/rest/Customer/CustomerID`;
+    const endpoint = `https://brave-desert-0e6da1a1e.5.azurestaticapps.net/data-api/rest/Customer/CustomerID`;
     console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/${id}`);
     const result = await response.json();
