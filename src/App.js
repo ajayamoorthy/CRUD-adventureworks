@@ -55,12 +55,12 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Adventureworks CRUD</h1>
+        <h2>Adventureworks CRUD</h2>
         <ListButton />
         <GetButton />
         <UpdateButton />
         <CreateButton />
-        <DeleteButton />
+        <DeleteButton /> 
       </header>
     </div>
   );
