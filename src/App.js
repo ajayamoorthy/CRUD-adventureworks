@@ -72,7 +72,7 @@ function App() {
   } */
 
   async function fetchCustomer(id) {
-    const endpoint = `https://crud-advworks.azurewebsites.net/api/fetchcustomer/${id}`;
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/fetchcustomer?CustomerID=${id}`;
     console.log(`Fetching customer with ID: ${id}`);
 
     const response = await fetch(endpoint);
