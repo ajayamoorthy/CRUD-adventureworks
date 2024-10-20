@@ -30,7 +30,7 @@
   },
   "entities": {
     "Customer": {
-      "source": "SalesLT.Customer",
+      "source": "SalesLT.Customer_New",
       "permissions": [
         {
           "actions": ["*"],

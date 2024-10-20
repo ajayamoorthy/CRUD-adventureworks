@@ -39,8 +39,22 @@ function App() {
   
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
   }
+
+  async function fetchAllCustomers() {
+    const endpoint = `/data-api/rest/Customer`;
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      console.error('Fetch error:', response.statusText);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result.value;
+
+  }
   
-  async function fetchCustomer(id) {
+/*   async function fetchCustomer(id) {
     const endpoint = `/data-api/rest/Customer/CustomerID`; 
     console.log(`Fetching customer with ID: ${id}`);
     const response = await fetch(`${endpoint}/${id}`);
@@ -55,9 +69,26 @@ function App() {
     console.log('API Response:', result);
     setCustomer(result.value[0]);
     setIsEditing(false);
-  }
+  } */
 
-  
+  async function fetchCustomer(id) {
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/fetchcustomer/${id}`;
+    console.log(`Fetching customer with ID: ${id}`);
+
+    const response = await fetch(endpoint);
+
+    if (!response.ok) {
+      console.error('Fetch error: ', response.statusText);
+      throw new Error(`HTTP Error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.table(result);
+    console.log('API Response:', result);
+    setCustomer(result);
+    setIsEditing(false);
+    
+  }
 
   async function handleUpdate() {
 
@@ -92,7 +123,6 @@ function App() {
     });
 
     if(response.ok) {
-      alert("Customer updated successfully.");
       fetchCustomer(customer.CustomerID);
     } else {
       alert("Error updating customer.");
@@ -118,8 +148,17 @@ function App() {
     const newRowguid = generateUUID();
     const currentDateTime = getCurrentDateTime();
 
+    const allCustomers = await fetchAllCustomers();
+
+    const maximumID = allCustomers.reduce((max, customer) => {
+      return Math.max(max, customer.CustomerID);
+    }, 0);
+
+    const newID = maximumID + 1;
+
     const createUserData = {
       ...newCustomer,
+      CustomerID: newID,
       PasswordHash: '0',
       PasswordSalt: '0',
       rowguid: newRowguid,
@@ -138,19 +177,10 @@ function App() {
     const result = await response.json();
 
     if (response.ok) {
-      alert(`Customer created successfully. New Customer ID: ${result.CustomerID}`);
       setCustomer(result);
-      setNewCustomer({
-        Title: '',
-        NameStyle: false,
-        FirstName: '',
-        MiddleName: '',
-        LastName: '',
-        CompanyName: '',
-        SalesPerson: '',
-        EmailAddress: '',
-        Phone: '',
-      });
+      fetchCustomer(newID);
+      //console.log(`Customer created successfully. New Customer ID: ${result.FirstName}`);
+      console.log(`New Customer ID: ${newID}`);
     } else {
       alert('Error creating customer.');
     }
