@@ -84,11 +84,35 @@ function App() {
       throw new Error(`HTTP Error! status: ${response.status}`);
     }
 
-    const result = await response.json();
-    console.table(result);
-    console.log('API Response:', result);
-    setCustomer(result);
-    setIsEditing(false);
+    try {
+        const reader = response.body.getReader();
+        const stream = new ReadableStream({
+            start(controller) {
+                function push() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            controller.close();
+                            return;
+                        }
+                        controller.enqueue(value);
+                        push();
+                    });
+                }
+                push();
+            }
+        });
+
+        const result = new Response(stream);
+        const jsonResult = await result.json();
+
+        console.table(jsonResult);
+        console.log('API Response:', jsonResult);
+        setCustomer(jsonResult);
+        setIsEditing(false);
+    } catch (err) {
+        console.error('Failed to parse JSON:', err);
+        throw new Error('Invalid JSON response');
+    }
     
   }
 
