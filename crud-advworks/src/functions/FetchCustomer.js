@@ -31,7 +31,7 @@ app.http('FetchCustomer', {
         } catch (err) {
             //handle other errors
             console.log("changed string");
-            console.log('[FetchCustomer.js] Database error: ', err);
+            context.log('[FetchCustomer.js] Database error: ', err);
             return { status: 500, body: 'Internal Server Error'};
         } finally {
             //close sql connection
