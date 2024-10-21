@@ -41,7 +41,7 @@ app.http('FetchCustomer', {
 
             //either return customer or error
             if (result.recordset.length > 0) {
-                return { status: 200, body: result.recordset[0]};
+                return { status: 200, body: JSON.stringify(result.recordset[0])};
             } else {
                 return { status: 404, body: 'Customer not found'};
             }

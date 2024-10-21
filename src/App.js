@@ -78,15 +78,13 @@ function App() {
     const response = await fetch(endpoint);
     console.log("Raw response:", response);
 
-    const result = await response.json();
 
-
-    if (!result.ok) {
-      console.error('Fetch error: ', result.statusText);
-      throw new Error(`HTTP Error! status: ${result.status}`);
+    if (!response.ok) {
+      console.error('Fetch error: ', response.statusText);
+      throw new Error(`HTTP Error! status: ${response.status}`);
     }
 
-    
+    const result = await response.json();
     console.table(result);
     console.log('API Response:', result);
     setCustomer(result);
