@@ -9,6 +9,7 @@ app.http('FetchCustomer', {
         context.log(`Http function processed request for url "${request.url}"`);
 
         const customerID = request.query.get('CustomerID');
+        context.log("Customer ID: ", customerID);
 
         //handle requests w/o customer ids
         if (!customerID) {

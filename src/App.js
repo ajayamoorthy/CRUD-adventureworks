@@ -76,6 +76,8 @@ function App() {
     console.log(`Fetching customer with ID: ${id}`);
 
     const response = await fetch(endpoint);
+    console.log("Raw response:", response);
+
 
     if (!response.ok) {
       console.error('Fetch error: ', response.statusText);
