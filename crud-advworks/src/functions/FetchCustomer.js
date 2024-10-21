@@ -16,7 +16,7 @@ app.http('FetchCustomer', {
 
         try {
             //connect to database
-            await sql.connect('Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";');
+            await sql.connect('Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=Active Directory Default;');
             
             //query the database for the customer by CustomerID
             const result = await sql.query`SELECT * FROM SalesLT.Customer WHERE CustomerID = ${customerID}`;
