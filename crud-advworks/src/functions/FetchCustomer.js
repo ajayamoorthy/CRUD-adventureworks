@@ -1,5 +1,6 @@
 const { app } = require('@azure/functions');
 const sql = require('mssql');
+const { DefaultAzureCredential } = require('@azure/identity');
 
 app.http('FetchCustomer', {
     methods: ['GET'],
@@ -16,8 +17,24 @@ app.http('FetchCustomer', {
 
         try {
             //connect to database
-            await sql.connect("Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Authentication=Active Directory Managed Identity;");
+            //await sql.connect("Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Authentication=Active Directory Managed Identity;");
             
+            const credential = new DefaultAzureCredential();
+            const accessToken = await credential.getToken('https://database.windows.net/');
+            await sql.connect({
+                server: 'sqlserver-reactproject.database.windows.net',
+                authentication: {
+                    type: 'azure-active-directory-access-token',
+                    options: {
+                        token: accessToken.token
+                    }
+                },
+                options: {
+                    database: 'adventureworks-aj',
+                    encrypt: true
+                }
+            });
+
             //query the database for the customer by CustomerID
             const result = await sql.query`SELECT * FROM SalesLT.Customer WHERE CustomerID = ${customerID}`;
 
