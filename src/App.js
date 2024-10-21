@@ -78,41 +78,19 @@ function App() {
     const response = await fetch(endpoint);
     console.log("Raw response:", response);
 
+    const result = await response.json();
 
-    if (!response.ok) {
-      console.error('Fetch error: ', response.statusText);
-      throw new Error(`HTTP Error! status: ${response.status}`);
+
+    if (!result.ok) {
+      console.error('Fetch error: ', result.statusText);
+      throw new Error(`HTTP Error! status: ${result.status}`);
     }
 
-    try {
-        const reader = response.body.getReader();
-        const stream = new ReadableStream({
-            start(controller) {
-                function push() {
-                    reader.read().then(({ done, value }) => {
-                        if (done) {
-                            controller.close();
-                            return;
-                        }
-                        controller.enqueue(value);
-                        push();
-                    });
-                }
-                push();
-            }
-        });
-
-        const result = new Response(stream);
-        const jsonResult = await result.json();
-
-        console.table(jsonResult);
-        console.log('API Response:', jsonResult);
-        setCustomer(jsonResult);
-        setIsEditing(false);
-    } catch (err) {
-        console.error('Failed to parse JSON:', err);
-        throw new Error('Invalid JSON response');
-    }
+    
+    console.table(result);
+    console.log('API Response:', result);
+    setCustomer(result);
+    setIsEditing(false);
     
   }
 
