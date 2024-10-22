@@ -16,7 +16,22 @@ app.http('DeleteCustomer', {
 
         try {
             //connect to database
-            await sql.connect('Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";');
+            //await sql.connect('Server=tcp:sqlserver-reactproject.database.windows.net,1433;Initial Catalog=adventureworks-aj;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default";');
+            const credential = new DefaultAzureCredential();
+            const accessToken = await credential.getToken('https://database.windows.net/');
+            await sql.connect({
+                server: 'sqlserver-reactproject.database.windows.net',
+                authentication: {
+                    type: 'azure-active-directory-access-token',
+                    options: {
+                        token: accessToken.token
+                    }
+                },
+                options: {
+                    database: 'adventureworks-aj',
+                    encrypt: true
+                }
+            });
 
             //try to delete
             const result = await sql.query`DELETE FROM SalesLT.Customer WHERE CustomerID = ${customerID}`;

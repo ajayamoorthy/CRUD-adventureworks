@@ -132,10 +132,12 @@ function App() {
   }
 
   async function handleDelete() {
-    const endpoint = `/data-api/rest/Customer/CustomerID/${customerID}`
-    const response = await fetch(endpoint, {
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/deletecustomer?CustomerID=${customerID}`
+    /* const response = await fetch(endpoint, {
       method: 'DELETE',
-    });
+    }); */
+
+    const response = await fetch(endpoint);
 
     if(response.ok) {
       alert('Customer deleted successfully!');
