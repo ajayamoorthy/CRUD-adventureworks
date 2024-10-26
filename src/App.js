@@ -53,23 +53,6 @@ function App() {
     return result.value;
 
   }
-  
-/*   async function fetchCustomer(id) {
-    const endpoint = `/data-api/rest/Customer/CustomerID`; 
-    console.log(`Fetching customer with ID: ${id}`);
-    const response = await fetch(`${endpoint}/${id}`);
-    
-    if (!response.ok) {
-        console.error('Fetch error:', response.statusText);
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const result = await response.json();
-    console.table(result.value);
-    console.log('API Response:', result);
-    setCustomer(result.value[0]);
-    setIsEditing(false);
-  } */
 
   async function fetchCustomer(id) {
     const endpoint = `https://crud-advworks.azurewebsites.net/api/fetchcustomer?CustomerID=${id}`;
@@ -115,11 +98,6 @@ function App() {
       rowguid: customer.rowguid,
       ModifiedDate: getCurrentDateTime(),
     };
-
-    /* const updatedData = {
-      CustomerID: customer.CustomerID,
-      FirstName: updatedCustomer.FirstName || customer.FirstName
-    }; */
 
     const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer`;
     const response = await fetch(endpoint, {
