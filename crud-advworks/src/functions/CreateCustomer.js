@@ -103,7 +103,10 @@ app.http('CreateCustomer', {
             // Log the new Customer ID
             context.log(`New Customer ID: ${result.recordset[0].CustomerID}`);
 
-            return { status: 201, body: { CustomerID: result.recordset[0].CustomerID } };
+            return { 
+                status: 201, 
+                headers: { 'Content-Type': 'application/json'},
+                body: JSON.stringify({ CustomerID: result.recordset[0].CustomerID })};
 
 
         } catch (err) {

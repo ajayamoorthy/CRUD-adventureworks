@@ -145,13 +145,11 @@ function App() {
       body: JSON.stringify(createUserData),
     });
 
-    const text = await response.text();
-    console.log('Raw response:', text);
     
 
     if (response.ok) {
-      const result = JSON.parse(text);
-      console.log('Parsed result:', JSON.stringify(result, null, 2));
+      const result = await response.json();
+      console.log('Create Customer Response:', result);
       setCustomer(result);
       console.log(`New Customer ID: ${result.CustomerID}`);
       fetchCustomer(result.CustomerID);
