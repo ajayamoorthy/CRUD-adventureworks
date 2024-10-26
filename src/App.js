@@ -154,6 +154,7 @@ function App() {
       //fetchCustomer(newID);
       //console.log(`Customer created successfully. New Customer ID: ${result.FirstName}`);
       console.log(`New Customer ID: ${result.CustomerID}`);
+      fetchCustomer(result.CustomerID);
     } else {
       alert('Error creating customer.');
     }

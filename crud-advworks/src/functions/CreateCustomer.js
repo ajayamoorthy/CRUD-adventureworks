@@ -10,22 +10,22 @@ app.http('CreateCustomer', {
             
         try {
 
-            const newCustomer = await request.json();
+            //const newCustomer = await request.json();
 
-        /*const {
-            Title, FirstName, MiddleName, LastName, CompanyName,
-            SalesPerson, EmailAddress, Phone
-        } = await request.json();*/
-        context.log("Received input data:", { Title, FirstName, MiddleName, LastName, CompanyName, SalesPerson, EmailAddress, Phone});
+            const {
+                Title, NameStyle = 0, FirstName, MiddleName, LastName, CompanyName,
+                SalesPerson, EmailAddress, Phone
+            } = await request.json();
+            context.log("Received input data:", { Title, FirstName, MiddleName, LastName, CompanyName, SalesPerson, EmailAddress, Phone});
 
-        if (!newCustomer || !newCustomer.FirstName || !newCustomer.LastName) {
-            return { status: 400, body: 'Invalid customer data.' };
-        }
+            if (!FirstName || !LastName) {
+                return { status: 400, body: 'Invalid customer data.' };
+            }
 
-        const PasswordHash = '0';
-        const PasswordSalt = '0';
-        const newRowguid = generateUUID();
-        const currentDateTime = getCurrentDateTime();  
+            const PasswordHash = '0';
+            const PasswordSalt = '0';
+            const newRowguid = generateUUID();
+            const currentDateTime = getCurrentDateTime();  
 
             const credential = new DefaultAzureCredential();
             const accessToken = await credential.getToken('https://database.windows.net/');
@@ -42,32 +42,69 @@ app.http('CreateCustomer', {
                     encrypt: true
                 }
             });
+            context.log("[CreateCustomer.js]: Database accessed.")
 
-            const result = await sql.query`
-            INSERT INTO SalesLT.Customer (Title, NameStyle, FirstName, MiddleName, LastName, CompanyName, SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate)
-            VALUES (${newCustomer.Title}, ${newCustomer.NameStyle}, ${newCustomer.FirstName}, ${newCustomer.MiddleName}, ${newCustomer.LastName}, ${newCustomer.CompanyName}, ${newCustomer.SalesPerson}, ${newCustomer.EmailAddress}, ${newCustomer.Phone}, ${PasswordHash}, ${PasswordSalt}, ${newRowguid}, ${currentDateTime});
+            const requestQuery = new sql.Request();
+            requestQuery.input('Title', sql.VarChar, Title);
+            requestQuery.input('NameStyle', sql.Bit, NameStyle);
+            requestQuery.input('FirstName', sql.VarChar, FirstName);
+            requestQuery.input('MiddleName', sql.VarChar, MiddleName);
+            requestQuery.input('LastName', sql.VarChar, LastName);
+            requestQuery.input('CompanyName', sql.VarChar, CompanyName);
+            requestQuery.input('SalesPerson', sql.VarChar, SalesPerson);
+            requestQuery.input('EmailAddress', sql.VarChar, EmailAddress);
+            requestQuery.input('Phone', sql.VarChar, Phone);
+            requestQuery.input('PasswordHash', sql.VarChar, PasswordHash);
+            requestQuery.input('PasswordSalt', sql.VarChar, PasswordSalt);
+            requestQuery.input('rowguid', sql.UniqueIdentifier, newRowguid);
+            requestQuery.input('ModifiedDate', sql.DateTime, currentDateTime); 
+
+            context.log("[CreateCustomer.js]: requestQuery created.");
+
+            const query = `
+                INSERT INTO SalesLT.Customer (
+                    Title,
+                    NameStyle,
+                    FirstName,
+                    MiddleName,
+                    LastName,
+                    CompanyName,
+                    SalesPerson,
+                    EmailAddress,
+                    Phone,
+                    PasswordHash,
+                    PasswordSalt,
+                    rowguid,
+                    ModifiedDate
+                ) VALUES (
+                    @Title,
+                    @NameStyle,
+                    @FirstName,
+                    @MiddleName,
+                    @LastName,
+                    @CompanyName,
+                    @SalesPerson,
+                    @EmailAddress,
+                    @Phone,
+                    @PasswordHash,
+                    @PasswordSalt,
+                    @rowguid,
+                    @ModifiedDate
+                );
+                
+                SELECT SCOPE_IDENTITY() AS CustomerID;
             `;
+
+            context.log("[CreateCustomer.js]: Query const created");
+
+            const result = await requestQuery.query(query);
+            context.log("[CreateCustomer.js]: Processed query request ");
 
             // Log the new Customer ID
             context.log(`New Customer ID: ${result.recordset[0].CustomerID}`);
 
             return { status: 201, body: { CustomerID: result.recordset[0].CustomerID } };
 
-
-            /* const requestQuery = new sql.Request();
-            requestQuery.input('Title', sql.VarChar, createNewCustData.Title);
-            requestQuery.input('NameStyle', sql.Bit, createNewCustData.NameStyle);
-            requestQuery.input('FirstName', sql.VarChar, createNewCustData.FirstName);
-            requestQuery.input('MiddleName', sql.VarChar, createNewCustData.MiddleName);
-            requestQuery.input('LastName', sql.VarChar, createNewCustData.LastName);
-            requestQuery.input('CompanyName', sql.VarChar, createNewCustData.CompanyName);
-            requestQuery.input('SalesPerson', sql.VarChar, createNewCustData.SalesPerson);
-            requestQuery.input('EmailAddress', sql.VarChar, createNewCustData.EmailAddress);
-            requestQuery.input('Phone', sql.VarChar, createNewCustData.Phone);
-            requestQuery.input('PasswordHash', sql.VarChar, createNewCustData.PasswordHash);
-            requestQuery.input('PasswordSalt', sql.VarChar, createNewCustData.PasswordSalt);
-            requestQuery.input('rowguid', sql.UniqueIdentifier, createNewCustData.rowguid);
-            requestQuery.input('ModifiedDate', sql.DateTime, createNewCustData.ModifiedDate); */
 
         } catch (err) {
             context.log.error('Create Customer failed', err);
