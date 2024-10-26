@@ -18,7 +18,20 @@ function App() {
     Phone: '',
   });
 
-  async function fetchAllCustomers() {
+  function getCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
+  }
+
+  /* async function fetchAllCustomers() {
     const endpoint = `/data-api/rest/Customer`;
     const response = await fetch(endpoint);
 
@@ -30,7 +43,7 @@ function App() {
     const result = await response.json();
     return result.value;
 
-  }
+  } */
 
   async function fetchCustomer(id) {
     const endpoint = `https://crud-advworks.azurewebsites.net/api/fetchcustomer?CustomerID=${id}`;
