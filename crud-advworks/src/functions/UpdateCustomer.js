@@ -8,6 +8,9 @@ app.http('UpdateCustomer', {
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
 
+        //const customerID = request.query.CustomerID;
+        //context.log("Req param id:", customerID);
+
         const {
             CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
             SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
@@ -55,7 +58,7 @@ app.http('UpdateCustomer', {
             `;
 
             const result = await sql.query(query, {
-                CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
+                customerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
                 SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
             });
 

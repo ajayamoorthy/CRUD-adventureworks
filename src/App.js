@@ -100,6 +100,7 @@ function App() {
     }
 
     const updatedData = { 
+      CustomerID: customer.CustomerID,
       Title: customer.Title,   
       NameStyle: customer.NameStyle,        
       FirstName: updatedCustomer.FirstName || customer.FirstName, //use the updated value or original if unchanged
@@ -120,7 +121,7 @@ function App() {
       FirstName: updatedCustomer.FirstName || customer.FirstName
     }; */
 
-    const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer?CustomerID=${customer.CustomerID}`;
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer`;
     const response = await fetch(endpoint, {
       method: 'PUT',
       headers: {
