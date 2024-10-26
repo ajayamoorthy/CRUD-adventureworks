@@ -6,9 +6,11 @@ app.http('CreateCustomer', {
     methods: ['POST'],
     authLevel: 'anonymous',
     handler: async (request, context) => {
-        context.log(`Http function processed request for url "${request.url}"`);
+        context.log(`Http function processed request for url "${request.url}"`);     
+            
+        try {
 
-        const newCustomer = await request.json();
+            const newCustomer = await request.json();
 
         /*const {
             Title, FirstName, MiddleName, LastName, CompanyName,
@@ -23,9 +25,7 @@ app.http('CreateCustomer', {
         const PasswordHash = '0';
         const PasswordSalt = '0';
         const newRowguid = generateUUID();
-        const currentDateTime = getCurrentDateTime();       
-            
-        try {
+        const currentDateTime = getCurrentDateTime();  
 
             const credential = new DefaultAzureCredential();
             const accessToken = await credential.getToken('https://database.windows.net/');

@@ -136,6 +136,7 @@ function App() {
     const createUserData = {
       ...newCustomer,
     };
+    console.log(createUserData);
 
     const endpoint = `https://crud-advworks.azurewebsites.net/api/createcustomer`;
     const response = await fetch(endpoint, {
