@@ -8,7 +8,10 @@ app.http('UpdateCustomer', {
     handler: async (request, context) => {
         context.log(`Http function processed request for url "${request.url}"`);
 
-        const { CustomerID, FirstName } = await request.json();
+        const {
+            CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
+            SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
+        } = await request.json();
 
         if (!CustomerID || !FirstName) {
             return { status: 400, body: 'CustomerID and FirstName are required'};
@@ -33,12 +36,28 @@ app.http('UpdateCustomer', {
 
             const query = `
                 UPDATE SalesLT.Customer
-                SET FirstName = @FirstName, ModifiedDate = GETDATE()
+                SET 
+                    Title = @Title,
+                    NameStyle = @NameStyle,
+                    FirstName = @FirstName,
+                    MiddleName = @MiddleName,
+                    LastName = @LastName,
+                    CompanyName = @CompanyName,
+                    SalesPerson = @SalesPerson,
+                    EmailAddress = @EmailAddress,
+                    Phone = @Phone,
+                    PasswordHash = @PasswordHash,
+                    PasswordSalt = @PasswordSalt,
+                    rowguid = @rowguid,
+                    ModifiedDate = @ModifiedDate
                 WHERE CustomerID = @CustomerID
             `;
 
-            const result = await sql.query(query, { CustomerID, FirstName });
-
+            const result = await sql.query(query, {
+                CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
+                SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
+            });
+            
             if (result.rowsAffected[0] === 0) {
                 return {status: 404, body: 'Customer not found'};
             }
