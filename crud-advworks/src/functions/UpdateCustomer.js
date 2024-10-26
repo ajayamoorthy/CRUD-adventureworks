@@ -12,6 +12,7 @@ app.http('UpdateCustomer', {
             CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
             SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
         } = await request.json();
+        context.log("Received request data:", { CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName, SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate });
 
         if (!CustomerID || !FirstName) {
             return { status: 400, body: 'CustomerID and FirstName are required'};
@@ -57,7 +58,7 @@ app.http('UpdateCustomer', {
                 CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
                 SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
             });
-            
+
             if (result.rowsAffected[0] === 0) {
                 return {status: 404, body: 'Customer not found'};
             }
