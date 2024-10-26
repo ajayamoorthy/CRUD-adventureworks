@@ -1,5 +1,6 @@
 const { app } = require('@azure/functions');
 const sql = require('mssql');
+const { DefaultAzureCredential } = require('@azure/identity');
 
 app.http('DeleteCustomer', {
     methods: ['DELETE'],
@@ -33,8 +34,12 @@ app.http('DeleteCustomer', {
                 }
             });
 
-            //try to delete
+            const resultDeleteAddress = await sql.query`DELETE FROM SalesLT.CustomerAddress WHERE CustomerID = ${customerID}`;
             const result = await sql.query`DELETE FROM SalesLT.Customer WHERE CustomerID = ${customerID}`;
+
+
+            //try to delete
+            //const result = await sql.query`DELETE FROM SalesLT.Customer WHERE CustomerID = ${customerID}`;
 
             if (result.rowsAffected[0] === 0) {
                 return { status: 404, body: 'Customer not found'};

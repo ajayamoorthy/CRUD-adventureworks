@@ -99,7 +99,7 @@ function App() {
       return;
     }
 
-    const updatedData = { 
+    /* const updatedData = { 
       Title: customer.Title,   
       NameStyle: customer.NameStyle,        
       FirstName: updatedCustomer.FirstName || customer.FirstName, //use the updated value or original if unchanged
@@ -113,9 +113,14 @@ function App() {
       PasswordSalt: customer.PasswordSalt,
       rowguid: customer.rowguid,
       ModifiedDate: getCurrentDateTime(),
+    }; */
+
+    const updatedData = {
+      CustomerID: customer.CustomerID,
+      FirstName: updatedCustomer.FirstName || customer.FirstName
     };
 
-    const endpoint = `/data-api/rest/Customer/CustomerID/${customer.CustomerID}`;
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer`;
     const response = await fetch(endpoint, {
       method: 'PUT',
       headers: {
