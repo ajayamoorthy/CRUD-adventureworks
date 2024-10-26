@@ -38,6 +38,22 @@ app.http('UpdateCustomer', {
                 }
             });
 
+            const requestQuery = new sql.Request();
+            requestQuery.input('CustomerID', sql.Int, CustomerID);
+            requestQuery.input('Title', sql.VarChar, Title);
+            requestQuery.input('NameStyle', sql.Bit, NameStyle);
+            requestQuery.input('FirstName', sql.VarChar, FirstName);
+            requestQuery.input('MiddleName', sql.VarChar, MiddleName);
+            requestQuery.input('LastName', sql.VarChar, LastName);
+            requestQuery.input('CompanyName', sql.VarChar, CompanyName);
+            requestQuery.input('SalesPerson', sql.VarChar, SalesPerson);
+            requestQuery.input('EmailAddress', sql.VarChar, EmailAddress);
+            requestQuery.input('Phone', sql.VarChar, Phone);
+            requestQuery.input('PasswordHash', sql.VarChar, PasswordHash);
+            requestQuery.input('PasswordSalt', sql.VarChar, PasswordSalt);
+            requestQuery.input('rowguid', sql.UniqueIdentifier, rowguid);
+            requestQuery.input('ModifiedDate', sql.DateTime, ModifiedDate);
+
             const query = `
                 UPDATE SalesLT.Customer
                 SET 
@@ -57,10 +73,12 @@ app.http('UpdateCustomer', {
                 WHERE CustomerID = @CustomerID
             `;
 
-            const result = await sql.query(query, {
-                customerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
+            /* const result = await sql.query(query, {
+                CustomerID, Title, NameStyle, FirstName, MiddleName, LastName, CompanyName,
                 SalesPerson, EmailAddress, Phone, PasswordHash, PasswordSalt, rowguid, ModifiedDate
-            });
+            }); */
+
+            const result = await requestQuery.query(query);
 
             if (result.rowsAffected[0] === 0) {
                 return {status: 404, body: 'Customer not found'};

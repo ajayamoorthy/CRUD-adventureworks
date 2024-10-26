@@ -313,8 +313,8 @@ function App() {
                 <input
                   type="text"
                   placeholder="First Name"
-                  value={updatedCustomer.FirstName || customer.FirstName}
-                  onChange={(e) => setUpdatedCustomer({ ...updatedCustomer, FirstName: e.target.value })}
+                  value={updatedCustomer.FirstName || ''}
+                  onChange={(e) => setUpdatedCustomer({...updatedCustomer, FirstName: e.target.value})}
                 />
                 {/* Add more input fields for other editable properties */}
                 <button onClick={handleUpdate}>Update</button>
