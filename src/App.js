@@ -18,28 +18,6 @@ function App() {
     Phone: '',
   });
 
-  function generateUUID() { // Public Domain/MIT
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0;
-        var v = (c === 'x') ? r : (r & 0x3) | 0x8; // Added parentheses for clarity
-        return v.toString(16);
-    });
-  }
-
-
-  function getCurrentDateTime() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-  
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}.${milliseconds}`;
-  }
-
   async function fetchAllCustomers() {
     const endpoint = `/data-api/rest/Customer`;
     const response = await fetch(endpoint);
@@ -131,7 +109,7 @@ function App() {
 
   async function handleCreate() {
 
-    const newRowguid = generateUUID();
+    /* const newRowguid = generateUUID();
     const currentDateTime = getCurrentDateTime();
 
     const allCustomers = await fetchAllCustomers();
@@ -140,18 +118,13 @@ function App() {
       return Math.max(max, customer.CustomerID);
     }, 0);
 
-    const newID = maximumID + 1;
+    const newID = maximumID + 1; */
 
     const createUserData = {
       ...newCustomer,
-      CustomerID: newID,
-      PasswordHash: '0',
-      PasswordSalt: '0',
-      rowguid: newRowguid,
-      ModifiedDate: currentDateTime,
     };
 
-    const endpoint = `/data-api/rest/Customer`;
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/createcustomer`;
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
@@ -164,9 +137,9 @@ function App() {
 
     if (response.ok) {
       setCustomer(result);
-      fetchCustomer(newID);
+      //fetchCustomer(newID);
       //console.log(`Customer created successfully. New Customer ID: ${result.FirstName}`);
-      console.log(`New Customer ID: ${newID}`);
+      console.log(`New Customer ID: ${result.CustomerID}`);
     } else {
       alert('Error creating customer.');
     }
