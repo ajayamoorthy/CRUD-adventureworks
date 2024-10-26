@@ -133,9 +133,7 @@ function App() {
 
     const newID = maximumID + 1; */
 
-    const createUserData = {
-      ...newCustomer,
-    };
+    const createUserData = {...newCustomer};
     console.log(createUserData);
 
     const endpoint = `https://crud-advworks.azurewebsites.net/api/createcustomer`;
@@ -147,12 +145,11 @@ function App() {
       body: JSON.stringify(createUserData),
     });
 
-    const result = await response.json();
+    
 
     if (response.ok) {
+      const result = await response.json();
       setCustomer(result);
-      //fetchCustomer(newID);
-      //console.log(`Customer created successfully. New Customer ID: ${result.FirstName}`);
       console.log(`New Customer ID: ${result.CustomerID}`);
       fetchCustomer(result.CustomerID);
     } else {
