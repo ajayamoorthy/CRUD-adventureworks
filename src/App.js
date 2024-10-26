@@ -120,7 +120,7 @@ function App() {
       FirstName: updatedCustomer.FirstName || customer.FirstName
     }; */
 
-    const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer?CustomerID=${id}`;
+    const endpoint = `https://crud-advworks.azurewebsites.net/api/updatecustomer?CustomerID=${customer.CustomerID}`;
     const response = await fetch(endpoint, {
       method: 'PUT',
       headers: {
